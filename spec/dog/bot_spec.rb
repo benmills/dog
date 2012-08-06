@@ -1,6 +1,6 @@
 require "minitest/spec"
 require "minitest/autorun"
-require_relative "../lib/dog.rb"
+require_relative "../../lib/dog/bot.rb"
 
 class FakeConnection
   attr_reader :rooms, :output
@@ -19,9 +19,9 @@ class FakeConnection
   end
 end
 
-describe Dog do
+describe Dog::Bot do
   let(:connection) { FakeConnection.new }
-  subject { Dog.new(connection) }
+  subject { Dog::Bot.new(connection) }
 
   describe ".say" do
     it "delegates to the connection" do

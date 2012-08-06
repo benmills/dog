@@ -1,8 +1,8 @@
 require "minitest/spec"
 require "minitest/autorun"
-require_relative "../lib/configure.rb"
+require_relative "../../lib/dog/configure.rb"
 
-describe Configure do
+describe Dog::Configure do
   let :config_string do
 <<CONFIG
 command "greet" do |c|
@@ -19,7 +19,7 @@ CONFIG
 
   describe "#parse" do
     it "parses a string into an array of commands" do
-      commands = Configure.parse config_string
+      commands = Dog::Configure.parse config_string
       command = commands.first
 
       command.respond_to("hi").must_equal "hello!"
@@ -28,7 +28,7 @@ CONFIG
     end
 
     it "parses subcommands" do
-      commands = Configure.parse config_string
+      commands = Dog::Configure.parse config_string
       command = commands.first
 
       command.respond_to("hi yo").must_equal "yo yo yo, hello!"

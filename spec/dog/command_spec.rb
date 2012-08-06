@@ -1,10 +1,10 @@
 require "minitest/spec"
 require "minitest/autorun"
-require_relative "../lib/command.rb"
+require_relative "../../lib/dog/command.rb"
 
-describe Command do
+describe Dog::Command do
   subject do
-    command = Command.new "Greet"
+    command = Dog::Command.new "Greet"
     command.matches "hello"
     command.action { "hi" }
     command
