@@ -1,7 +1,10 @@
 require "rubygems"
 require "blather/client"
 require "blather/stanza"
-require "twitter"
+require "uri"
+require "open-uri"
+require "json"
+require "google_image_api"
 
 require_relative "dog/configure"
 require_relative "dog/command"
@@ -56,8 +59,8 @@ end
 subscription(:request?) { |s| write_to_stream s.approve! }
 
 message :groupchat?, :body do |m|
-  pass if m.from == "foo@conference.#{client.jid.domain}/#{client.jid.node}" || m.delayed?
-  say Blather::JID.new("foo", "conference.localhost"), process(m.body), :groupchat
+  pass if m.from == "green@conference.#{client.jid.domain}/#{client.jid.node}" || m.delayed?
+  say Blather::JID.new("green", "conference.#{client.jid.domain}"), process(m.body), :groupchat
 end
 
 message :chat?, :body do |m|
