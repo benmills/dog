@@ -36,7 +36,7 @@ module Dog
 
     def respond_to input_string
       if matches? input_string
-        subcommand_response(input_string) || @action.call
+        subcommand_response(input_string) || @action.call(input_string)
       end
     end
   end

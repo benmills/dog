@@ -15,6 +15,11 @@ describe Dog::Command do
       subject.action { "new action" }
       subject.respond_to("hello").must_equal "new action"
     end
+
+    it "passes the body of the incoming text to the action" do
+      subject.action { |body| body }
+      subject.respond_to("hello foobarbaz1").must_equal "hello foobarbaz1"
+    end
   end
 
   describe ".matches" do
