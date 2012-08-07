@@ -7,6 +7,11 @@ describe Dog::Command do
     command = Dog::Command.new "Greet"
     command.matches "hello"
     command.action { "hi" }
+    command.subcommand "foo" do |subcommand|
+      subcommand.matches "foo"
+      subcommand.action { "bar" }
+    end
+
     command
   end
 
@@ -24,16 +29,16 @@ describe Dog::Command do
 
   describe ".matches" do
     it "adds a matcher to the command" do
-      subject.matches "foo"
-      subject.respond_to("foo").must_equal "hi"
+      subject.matches "newmatcher"
+      subject.respond_to("newmatcher").must_equal "hi"
     end
 
     it "can be called multiple times" do
-      subject.matches "foo"
-      subject.matches "bar"
+      subject.matches "firstnewmatcher"
+      subject.matches "secondnewmatcher"
 
-      subject.respond_to("foo").must_equal "hi"
-      subject.respond_to("bar").must_equal "hi"
+      subject.respond_to("firstnewmatcher").must_equal "hi"
+      subject.respond_to("secondnewmatcher").must_equal "hi"
     end
   end
 
@@ -49,16 +54,15 @@ describe Dog::Command do
     it "returns nil if no matcher maches" do
       subject.respond_to("bad input").must_be_nil
     end
+
+    it "matches only words" do
+      subject.respond_to("hellonomatch").must_be_nil
+    end
   end
 
   describe ".subcommand" do
-    it "adds a subcommand" do
-      subject.subcommand "cool greet" do |subcommand|
-        subcommand.matches "yo"
-        subcommand.action { "yo yo yo hello!" }
-      end
-
-      subject.respond_to("hello yo").must_equal "yo yo yo hello!"
+    it "matches subcommands" do
+      subject.respond_to("hello foo").must_equal "bar"
     end
   end
 end

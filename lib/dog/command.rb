@@ -16,7 +16,7 @@ module Dog
     end
 
     def matches? input_string
-      @matchers.any? { |matcher| input_string.match matcher }
+      @matchers.any? { |matcher| input_string.match /(\s|^)#{matcher}(\s|$)/ }
     end
 
     def subcommand title
@@ -36,7 +36,8 @@ module Dog
 
     def respond_to input_string
       if matches? input_string
-        subcommand_response(input_string) || @action.call(input_string)
+        sc_res = subcommand_response input_string
+        sc_res || @action.call(input_string)
       end
     end
   end
