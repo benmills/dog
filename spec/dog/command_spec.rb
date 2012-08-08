@@ -5,7 +5,7 @@ require_relative "../../lib/dog/command.rb"
 describe Dog::Command do
   subject do
     command = Dog::Command.new "Greet"
-    command.matches "hello"
+    command.matches "hello", /example\.com/
     command.action { "hi" }
     command.subcommand "foo" do |subcommand|
       subcommand.matches "foo"
@@ -57,6 +57,10 @@ describe Dog::Command do
 
     it "matches only words" do
       subject.respond_to("hellonomatch").must_be_nil
+    end
+
+    it "can use a regex matcher" do
+      subject.respond_to("http:/www.example.com").must_equal "hi"
     end
   end
 

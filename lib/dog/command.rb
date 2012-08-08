@@ -16,7 +16,13 @@ module Dog
     end
 
     def matches? input_string
-      @matchers.any? { |matcher| input_string.match /(\s|^)#{matcher}(\s|$)/ }
+      @matchers.any? do |matcher|
+        if matcher.is_a? String
+          input_string.match /(\s|^)#{matcher}(\s|$)/
+        else
+          input_string.match matcher
+        end
+      end
     end
 
     def subcommand title
