@@ -17,7 +17,7 @@ def respond_to text
     return response unless response.nil?
   end
 
-  "bark?"
+  nil
 end
 
 def respond_to_action body, kind
@@ -52,17 +52,18 @@ def reload_config
   @commands = Dog::Configure.parse config
 end
 
-when_ready do
-  reload_config
-end
-
+when_ready { reload_config }
 subscription(:request?) { |s| write_to_stream s.approve! }
 
 message :groupchat?, :body do |m|
   pass if m.from == "green@conference.#{client.jid.domain}/#{client.jid.node}" || m.delayed?
-  say Blather::JID.new("green", "conference.#{client.jid.domain}"), process(m.body), :groupchat
+  if response = process(m.body)
+    say Blather::JID.new("green", "conference.#{client.jid.domain}"), response, :groupchat
+  end
 end
 
 message :chat?, :body do |m|
-  say m.from, process(m.body)
+  if response = process(m.body)
+    say m.from, response
+  end
 end
