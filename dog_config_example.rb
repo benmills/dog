@@ -1,3 +1,8 @@
+task "say hi" do |t|
+  t.every "10min"
+  t.action { "Hello world!" }
+end
+
 command "get body of tweet" do |c|
   c.matches /twitter\.com/
   c.action do |message|

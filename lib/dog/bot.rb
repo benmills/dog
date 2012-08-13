@@ -1,9 +1,14 @@
+require 'rubygems'
+require 'rufus/scheduler'
+
 module Dog
   class Bot
     def initialize connection
       @connection = connection
       @commands = []
       @rooms = []
+      @data = {}
+      @data.default = {}
     end
 
     def process_chat_message message
@@ -58,8 +63,38 @@ module Dog
     def config
       raise "Need 'CONFIG_PATH' env var" unless ENV.has_key? "CONFIG_PATH"
 
-      config = File.read ENV["CONFIG_PATH"]
-      @commands = Configure.parse config
+      config_string = File.read ENV["CONFIG_PATH"]
+      config = Configure.parse config_string
+
+      @commands = config.commands
+      @scheduled_tasks = config.scheduled_tasks
+
+      schedule_tasks
+    end
+
+    def schedule_tasks
+      @scheduler.stop unless @scheduler.nil?
+
+      @scheduler = Rufus::Scheduler.start_new
+
+      @scheduled_tasks.each do |task|
+        @scheduler.every task.frequency do
+          response = task.run self
+          next if response.nil?
+
+          @rooms.each do |room|
+            @connection.say_to_chat room, response
+          end
+        end
+      end
+    end
+
+    def save_data key, val
+      @data[key] = val
+    end
+
+    def get_data key
+      @data[key]
     end
 
     def _from_self message

@@ -48,7 +48,7 @@ describe Dog::Bot do
 
   before(:each) { subject.config }
 
-  describe "process_chat_message" do
+  describe ".process_chat_message" do
     it "processes a message that matches" do
       message = OpenStruct.new :from => "bob", :body => "hi dog"
       subject.process_chat_message message
@@ -62,7 +62,7 @@ describe Dog::Bot do
     end
   end
 
-  describe "process_group_chat_message" do
+  describe ".process_group_chat_message" do
     it "processes a message that matches" do
       message = OpenStruct.new(
         :from => OpenStruct.new(:node => "bob", :domain => "chat"),
@@ -84,7 +84,7 @@ describe Dog::Bot do
     end
   end
 
-  describe "respond_to_action" do
+  describe ".respond_to_action" do
     it "joins a room" do
       output = subject.respond_to_action "dog join chatroom", :join
       output.must_equal "joined chatroom"
