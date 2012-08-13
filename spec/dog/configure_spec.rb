@@ -47,7 +47,7 @@ CONFIG
       config = Dog::Configure.parse task_config_string
       task = config.scheduled_tasks.first
 
-      task.run.must_equal "hello!"
+      task.run({}).must_equal "hello!"
       task.frequency.must_equal "1m"
     end
   end

@@ -15,7 +15,7 @@ describe Dog::ScheduledTask do
   describe ".action" do
     it "sets the action of the task" do
       subject.action { "my action" }
-      subject.run.must_equal "my action"
+      subject.run({}).must_equal "my action"
     end
   end
 end
