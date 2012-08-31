@@ -1,24 +1,30 @@
 module Dog
   class Connection
-    def initialize say, join, jid
-      @say, @join, @jid = say, join, jid
+    def initialize client
+      @client = client
     end
 
     def jid
-      @jid.call
+      @client.jid
     end
 
     def join room_name
-      @join.call "#{room_name}@conference.#{jid.domain}", jid.node
+      room = "#{room_name}@conference.#{jid.domain}"
+      service = jid.node
+
+      join_stanza = Blather::Stanza::Presence::MUC.new
+      join_stanza.to = "#{room}/#{service}"
+
+      @client.write join_stanza
     end
 
     def say to, text
-      @say.call to, text
+      @client.write Blather::Stanza::Message.new(to, text, :chat)
     end
 
     def say_to_chat room_name, text
       to = Blather::JID.new room_name, "conference.#{jid.domain}"
-      @say.call to, text, :groupchat
+      @client.write Blather::Stanza::Message.new(to, text, :groupchat)
     end
   end
 end
