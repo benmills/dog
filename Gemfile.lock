@@ -1,7 +1,15 @@
+PATH
+  remote: .
+  specs:
+    dog-bot (0.0.1)
+      blather (~> 0.8.0)
+      google_image_api (~> 0.0.1)
+      rufus-scheduler (~> 2.0.17)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (3.2.7)
+    activesupport (3.2.8)
       i18n (~> 0.6)
       multi_json (~> 1.0)
     blather (0.8.0)
@@ -10,12 +18,12 @@ GEM
       girl_friday
       niceogiri (~> 1.0)
       nokogiri (~> 1.5.5)
-    connection_pool (0.1.0)
+    connection_pool (0.9.2)
     eventmachine (0.12.10)
-    girl_friday (0.9.7)
-      connection_pool (~> 0.1.0)
+    girl_friday (0.10.0)
+      connection_pool (~> 0.9.0)
     google_image_api (0.0.1)
-    i18n (0.6.0)
+    i18n (0.6.1)
     multi_json (1.3.6)
     niceogiri (1.0.2)
       nokogiri (~> 1.4)
@@ -29,7 +37,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  blather (~> 0.8.0)
-  google_image_api
-  rake
-  rufus-scheduler
+  dog-bot!
+  rake (~> 0.9.2.2)
