@@ -1,6 +1,7 @@
 require "ostruct"
 require "minitest/spec"
 require "minitest/autorun"
+
 require_relative "../../lib/dog/bot"
 require_relative "../../lib/dog/command"
 
@@ -44,7 +45,7 @@ end
 
 describe Dog::Bot do
   let(:connection) { FakeConnection.new }
-  subject { Dog::Bot.new connection }
+  subject { Dog::Bot.new connection, "config" }
 
   before(:each) { subject.config }
 

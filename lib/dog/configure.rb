@@ -9,11 +9,12 @@ module Dog
       config
     end
 
-    attr_reader :commands, :scheduled_tasks
+    attr_reader :commands, :scheduled_tasks, :chat_rooms
 
     def initialize
       @commands = []
       @scheduled_tasks = []
+      @chat_rooms = []
     end
 
     def command title
@@ -26,6 +27,10 @@ module Dog
       task = ScheduledTask.new title
       yield task
       @scheduled_tasks << task
+    end
+
+    def chat_rooms *chat_rooms
+      @chat_rooms += chat_rooms
     end
   end
 end

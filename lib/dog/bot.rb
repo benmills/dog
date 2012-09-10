@@ -3,7 +3,8 @@ require 'rufus/scheduler'
 
 module Dog
   class Bot
-    def initialize connection
+    def initialize connection, config_path
+      @config_path = config_path
       @connection = connection
       @commands = []
       @rooms = []
@@ -61,14 +62,13 @@ module Dog
     end
 
     def config
-      raise "Need 'CONFIG_PATH' env var" unless ENV.has_key? "CONFIG_PATH"
-
-      config_string = File.read ENV["CONFIG_PATH"]
+      config_string = File.read @config_path
       config = Configure.parse config_string
 
       @commands = config.commands
       @scheduled_tasks = config.scheduled_tasks
 
+      config.chat_rooms.each { |chat_room| join chat_room }
       schedule_tasks
     end
 

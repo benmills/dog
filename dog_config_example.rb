@@ -1,7 +1,4 @@
-task "say hi" do |t|
-  t.every "10min"
-  t.action { "Hello world!" }
-end
+chat_rooms "dog_test", "dog_test2"
 
 command "get body of tweet" do |c|
   c.matches /twitter\.com/
