@@ -8,8 +8,7 @@ module Dog
       @connection = connection
       @commands = []
       @rooms = []
-      @data = {}
-      @data.default = {}
+      @brain = Brain.new
     end
 
     def process_chat_message message
@@ -87,14 +86,6 @@ module Dog
           end
         end
       end
-    end
-
-    def save_data key, val
-      @data[key] = val
-    end
-
-    def get_data key
-      @data[key]
     end
 
     def _from_self message
