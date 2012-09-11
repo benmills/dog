@@ -12,7 +12,7 @@
    gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
    gem.name          = "dog-bot"
    gem.require_paths = ["lib"]
-   gem.version       = "0.0.1"
+   gem.version       = "0.0.3"
 
    gem.add_dependency "blather", "~> 0.8.0"
    gem.add_dependency "google_image_api", "~> 0.0.1"

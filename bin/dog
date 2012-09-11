@@ -16,5 +16,11 @@ xmpp_connection = Dog::Connection.new xmpp_client
 xmpp_client.register_handler(:ready) { @bot.config }
 xmpp_client.register_handler(:message, :chat?, :body) { |m| @bot.process_chat_message m }
 xmpp_client.register_handler(:message, :groupchat?, :body) { |m| @bot.process_group_chat_message m }
+xmpp_client.register_handler(:disconnected) { xmpp_client.run }
+xmpp_client.register_handler(:error) { puts "ERROR" }
 
+Blather.logger.level = Logger::DEBUG
+
+trap(:INT) { EM.stop }
+trap(:TERM) { EM.stop }
 EM.run { xmpp_client.run }
