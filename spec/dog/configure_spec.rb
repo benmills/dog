@@ -5,13 +5,13 @@ require_relative "../../lib/dog/configure.rb"
 describe Dog::Configure do
   let :config_string do
 <<CONFIG
-command "greet" do |c|
-  c.matches "hello", "hi", "whats up"
-  c.action { "hello!" }
+command "greet" do
+  matches "hello", "hi", "whats up"
+  action { "hello!" }
 
-  c.subcommand "cool greet" do |subcommand|
-    subcommand.matches "yo"
-    subcommand.action { "yo yo yo, hello!" }
+  subcommand "cool greet" do
+    matches "yo"
+    action { "yo yo yo, hello!" }
   end
 end
 

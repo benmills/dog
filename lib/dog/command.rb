@@ -25,9 +25,9 @@ module Dog
       end
     end
 
-    def subcommand title
+    def subcommand title, &block
       subcommand = Command.new title
-      yield subcommand
+      subcommand.instance_eval &block
       @subcommands << subcommand
     end
 

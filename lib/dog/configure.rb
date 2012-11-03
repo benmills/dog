@@ -17,9 +17,9 @@ module Dog
       @chat_rooms = []
     end
 
-    def command title
+    def command title, &block
       command = Command.new title
-      yield command
+      command.instance_eval &block
       @commands << command
     end
 
