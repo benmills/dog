@@ -3,6 +3,7 @@ require "minitest/spec"
 require "minitest/autorun"
 
 require_relative "../../lib/dog/bot"
+require_relative "../../lib/dog/brain"
 require_relative "../../lib/dog/command"
 
 class FakeConnection
