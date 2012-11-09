@@ -7,7 +7,7 @@ describe Dog::ScheduledTask do
 
   describe ".every" do
     it "sets the frequency of the task" do
-      subject.every "1m"
+      subject.every("1m")
       subject.frequency.must_equal "1m"
     end
   end

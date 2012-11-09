@@ -9,7 +9,7 @@ require "google_image_api"
 $LOAD_PATH.unshift(File.expand_path('../lib', __FILE__))
 
 require "dog/bot"
-require "dog/brain"
 require "dog/configure"
 require "dog/connection"
 require "dog/command"
+require "dog/scheduler"

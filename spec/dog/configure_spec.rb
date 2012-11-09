@@ -45,7 +45,7 @@ CONFIG
   describe "#parse" do
     it "parses a string into an array of commands" do
       config = Dog::Configure.parse config_string
-      command = config.get_command "greet"
+      command = config.get_command("greet")
 
       command.respond_to("hi").must_equal "hello!"
       command.respond_to("hello").must_equal "hello!"
@@ -53,22 +53,22 @@ CONFIG
     end
 
     it "parses subcommands" do
-      config = Dog::Configure.parse config_string
-      command = config.get_command "greet"
+      config = Dog::Configure.parse(config_string)
+      command = config.get_command("greet")
 
       command.respond_to("hi yo").must_equal "yo yo yo, hello!"
     end
 
     it "parses subcommands into one top level command from many config entries" do
-      config = Dog::Configure.parse config_string
-      command = config.get_command "dog"
+      config = Dog::Configure.parse(config_string)
+      command = config.get_command("dog")
 
       command.respond_to("dog pet").must_equal "*wags tail*"
       command.respond_to("dog fetch").must_equal "*runs and fetches*"
     end
 
     it "parses a string into an array of scheduled tasks" do
-      config = Dog::Configure.parse config_string
+      config = Dog::Configure.parse(config_string)
       task = config.scheduled_tasks.first
 
       task.run({}).must_equal "hello!"
@@ -76,13 +76,13 @@ CONFIG
     end
 
     it "parses default chat rooms from a config string" do
-      config = Dog::Configure.parse config_string
+      config = Dog::Configure.parse(config_string)
 
       config.chat_rooms.first.must_equal "test_room"
     end
 
     it "parses multiple chat rooms from a config string" do
-      config = Dog::Configure.parse config_string
+      config = Dog::Configure.parse(config_string)
 
       config.chat_rooms.must_equal ["test_room", "test_room2"]
     end

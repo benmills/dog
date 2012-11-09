@@ -1,39 +1,37 @@
-require 'rubygems'
-require 'rufus/scheduler'
-
 module Dog
   class Bot
-    def initialize connection, config_path
+    def initialize(connection, config_path)
       @config_path = config_path
       @connection = connection
       @commands = []
       @rooms = []
-      @brain = Brain.new
+      @scheduler = Scheduler.new(self)
     end
 
-    def process_chat_message message
-      response = process message.body
-      @connection.say message.from, response unless response.nil?
+    def process_chat_message(message)
+      response = process(message.body)
+      say(message.from, response) unless response.nil?
     end
 
-    def process_group_chat_message message
+    def process_group_chat_message(message)
       return if _from_self(message) || message.delayed?
 
       response = process message.body
-      @connection.say_to_chat message.from.node, response unless response.nil?
+
+      say_to_chat(message.from.node, response) unless response.nil?
     end
 
-    def process message
-      response = respond_to message
+    def process(message)
+      response = respond_to(message)
 
-      if response.is_a? Symbol
-        respond_to_action message, response
+      if response.is_a?(Symbol)
+        respond_to_action(message, response)
       else
         response
       end
     end
 
-    def respond_to text
+    def respond_to(text)
       @commands.each do |command|
         response = command.respond_to text
         return response unless response.nil?
@@ -42,7 +40,7 @@ module Dog
       nil
     end
 
-    def respond_to_action message, kind
+    def respond_to_action(message, kind)
       case kind
       when :join then
         room_name = message.split.last
@@ -55,48 +53,36 @@ module Dog
       end
     end
 
-    def join room_name
-      @connection.join room_name
-      @rooms << room_name
+    def say(to, message)
+      @connection.say(to, message)
+    end
+
+    def say_to_chat(to, message)
+      @connection.say_to_chat(to, message)
+    end
+
+    def say_to_all_chat_rooms(message)
+      @rooms.each do |room|
+        say_to_chat(room, message)
+      end
+    end
+
+    def join(*room_names)
+      room_names.each do |room_name|
+        @connection.join room_name
+        @rooms << room_name
+      end
     end
 
     def config
-      config = Configure.parse config_string
+      config = Configure.parse_path(@config_path)
 
       @commands = config.commands
-      @scheduled_tasks = config.scheduled_tasks
-
-      config.chat_rooms.each { |chat_room| join chat_room }
-      schedule_tasks
+      @scheduler.schedule_tasks(config.scheduled_tasks)
+      join(*config.chat_rooms)
     end
 
-    def config_string(path=@config_path)
-      return File.read path if File.file? path
-
-      Dir.foreach(path).each_with_object("") do |item, output|
-        next if item == '.' or item == '..'
-        output << config_string(File.join(path, item))
-      end
-    end
-
-    def schedule_tasks
-      @scheduler.stop unless @scheduler.nil?
-
-      @scheduler = Rufus::Scheduler.start_new
-
-      @scheduled_tasks.each do |task|
-        @scheduler.every task.frequency do
-          response = task.run self
-          next if response.nil?
-
-          @rooms.each do |room|
-            @connection.say_to_chat room, response
-          end
-        end
-      end
-    end
-
-    def _from_self message
+    def _from_self(message)
       @rooms.each do |room|
         return true if "#{room}@conference.#{@connection.jid.domain}/#{@connection.jid.node}" == message.from
       end

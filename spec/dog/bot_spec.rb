@@ -3,8 +3,8 @@ require "minitest/spec"
 require "minitest/autorun"
 
 require_relative "../../lib/dog/bot"
-require_relative "../../lib/dog/brain"
 require_relative "../../lib/dog/command"
+require_relative "../../lib/dog/scheduler"
 
 class FakeConnection
   attr_reader :output, :chat_output, :rooms
@@ -46,20 +46,22 @@ end
 
 describe Dog::Bot do
   let(:connection) { FakeConnection.new }
-  subject { Dog::Bot.new connection, "config" }
+  subject { Dog::Bot.new(connection, "config") }
 
   before(:each) { subject.config }
 
   describe ".process_chat_message" do
     it "processes a message that matches" do
-      message = OpenStruct.new :from => "bob", :body => "hi dog"
-      subject.process_chat_message message
+      message = OpenStruct.new(:from => "bob", :body => "hi dog")
+      subject.process_chat_message(message)
+
       connection.output.last.must_equal ["bob", "hello"]
     end
 
     it "doesn't process a non-matching message" do
-      message = OpenStruct.new :from => "bob", :body => "bad string"
-      subject.process_chat_message message
+      message = OpenStruct.new(:from => "bob", :body => "bad string")
+      subject.process_chat_message(message)
+
       connection.output.must_be_empty
     end
   end
@@ -71,7 +73,8 @@ describe Dog::Bot do
         :body => "hi dog",
         :delayed? => false
       )
-      subject.process_group_chat_message message
+      subject.process_group_chat_message(message)
+
       connection.chat_output.last.must_equal ["bob", "hello"]
     end
 
@@ -81,21 +84,35 @@ describe Dog::Bot do
         :body => "bad string",
         :delayed? => false
       )
-      subject.process_group_chat_message message
+      subject.process_group_chat_message(message)
       connection.chat_output.must_be_empty
     end
   end
 
   describe ".respond_to_action" do
     it "joins a room" do
-      output = subject.respond_to_action "dog join chatroom", :join
+      output = subject.respond_to_action("dog join chatroom", :join)
+
       output.must_equal "joined chatroom"
       connection.rooms.last.must_equal "chatroom"
     end
 
     it "reloads" do
-      output = subject.respond_to_action "dog reload", :reload
+      output = subject.respond_to_action("dog reload", :reload)
       output.must_equal "config reloaded"
+    end
+  end
+
+  describe ".join" do
+    it "joins a room" do
+      subject.join("my_room")
+      connection.rooms.last.must_equal "my_room"
+    end
+
+    it "can join many rooms" do
+      rooms = ["my_room", "my_other_room"]
+      subject.join(*rooms)
+      connection.rooms.must_equal rooms
     end
   end
 end
