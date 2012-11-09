@@ -1,10 +1,12 @@
 module Dog
   class Command
+    attr_reader :title
+
     def initialize title
       @title = title
       @matchers = []
       @subcommands = []
-      @action = -> { }
+      @action = ->(input){ }
     end
 
     def action &action
@@ -42,8 +44,8 @@ module Dog
 
     def respond_to input_string
       if matches? input_string
-        sc_res = subcommand_response input_string
-        sc_res || @action.call(input_string)
+        response = subcommand_response input_string
+        response || @action.call(input_string)
       end
     end
   end

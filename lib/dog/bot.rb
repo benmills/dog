@@ -61,7 +61,6 @@ module Dog
     end
 
     def config
-      config_string = File.read @config_path
       config = Configure.parse config_string
 
       @commands = config.commands
@@ -69,6 +68,15 @@ module Dog
 
       config.chat_rooms.each { |chat_room| join chat_room }
       schedule_tasks
+    end
+
+    def config_string(path=@config_path)
+      return File.read path if File.file? path
+
+      Dir.foreach(path).each_with_object("") do |item, output|
+        next if item == '.' or item == '..'
+        output << config_string(File.join(path, item))
+      end
     end
 
     def schedule_tasks

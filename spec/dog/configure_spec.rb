@@ -15,6 +15,24 @@ command "greet" do
   end
 end
 
+command "dog" do
+  matches "dog"
+
+  subcommand "pet" do
+    matches "pet"
+    action { "*wags tail*" }
+  end
+end
+
+command "dog" do
+  matches "dog"
+
+  subcommand "fetch" do
+    matches "fetch"
+    action { "*runs and fetches*" }
+  end
+end
+
 task "say hi" do |t|
   t.every "1m"
   t.action { "hello!" }
@@ -27,7 +45,7 @@ CONFIG
   describe "#parse" do
     it "parses a string into an array of commands" do
       config = Dog::Configure.parse config_string
-      command = config.commands.first
+      command = config.get_command "greet"
 
       command.respond_to("hi").must_equal "hello!"
       command.respond_to("hello").must_equal "hello!"
@@ -36,9 +54,17 @@ CONFIG
 
     it "parses subcommands" do
       config = Dog::Configure.parse config_string
-      command = config.commands.first
+      command = config.get_command "greet"
 
       command.respond_to("hi yo").must_equal "yo yo yo, hello!"
+    end
+
+    it "parses subcommands into one top level command from many config entries" do
+      config = Dog::Configure.parse config_string
+      command = config.get_command "dog"
+
+      command.respond_to("dog pet").must_equal "*wags tail*"
+      command.respond_to("dog fetch").must_equal "*runs and fetches*"
     end
 
     it "parses a string into an array of scheduled tasks" do

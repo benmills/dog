@@ -9,18 +9,26 @@ module Dog
       config
     end
 
-    attr_reader :commands, :scheduled_tasks, :chat_rooms
+    attr_reader :scheduled_tasks, :chat_rooms
 
     def initialize
-      @commands = []
+      @commands = {}
       @scheduled_tasks = []
       @chat_rooms = []
     end
 
+    def commands
+      @commands.values
+    end
+
+    def get_command command_title
+      @commands[command_title]
+    end
+
     def command title, &block
-      command = Command.new title
+      command = @commands.fetch title, Command.new(title)
       command.instance_eval &block
-      @commands << command
+      @commands[title] = command
     end
 
     def task title

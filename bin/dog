@@ -19,8 +19,6 @@ xmpp_client.register_handler(:message, :groupchat?, :body) { |m| @bot.process_gr
 xmpp_client.register_handler(:disconnected) { xmpp_client.run }
 xmpp_client.register_handler(:error) { puts "ERROR" }
 
-Blather.logger.level = Logger::DEBUG
-
 trap(:INT) { EM.stop }
 trap(:TERM) { EM.stop }
 EM.run { xmpp_client.run }
