@@ -1,11 +1,14 @@
 module Dog
   class Bot
+    attr_accessor :memory
+
     def initialize(connection, config_path)
       @config_path = config_path
       @connection = connection
       @commands = []
       @rooms = []
       @scheduler = Scheduler.new(self)
+      @memory = {}
     end
 
     def process_chat_message(message)
@@ -49,6 +52,11 @@ module Dog
       when :reload then
         config
         "config reloaded"
+      when :run_task
+        title = message.split[3..-1].join(" ")
+        return nil if title.empty?
+        task = @tasks.find { |t| t.title == title }
+        task.run(self) unless task.nil?
       else "invalid action"
       end
     end
@@ -78,7 +86,8 @@ module Dog
       config = Configure.parse_path(@config_path)
 
       @commands = config.commands
-      @scheduler.schedule_tasks(config.scheduled_tasks)
+      @tasks = config.scheduled_tasks
+      @scheduler.schedule_tasks(@tasks)
       join(*config.chat_rooms)
     end
 

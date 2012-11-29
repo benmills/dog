@@ -5,6 +5,7 @@ require "minitest/autorun"
 require_relative "../../lib/dog/bot"
 require_relative "../../lib/dog/command"
 require_relative "../../lib/dog/scheduler"
+require_relative "../../lib/dog/scheduled_task"
 
 class FakeConnection
   attr_reader :output, :chat_output, :rooms
@@ -41,6 +42,11 @@ class Dog::Bot
     command.matches "hi"
     command.action { "hello" }
     @commands = [command]
+
+    task = Dog::ScheduledTask.new "my task"
+    task.every "4h"
+    task.action { "I did it!" }
+    @tasks = [task]
   end
 end
 
@@ -100,6 +106,11 @@ describe Dog::Bot do
     it "reloads" do
       output = subject.respond_to_action("dog reload", :reload)
       output.must_equal "config reloaded"
+    end
+
+    it "forces the given task to run" do
+      output = subject.respond_to_action("dog run task my task", :run_task)
+      output.must_equal "I did it!"
     end
   end
 

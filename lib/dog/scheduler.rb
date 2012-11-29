@@ -5,6 +5,7 @@ module Dog
   class Scheduler
     def initialize(bot)
       @bot = bot
+      @scheduler = Rufus::Scheduler.start_new
     end
 
     def schedule_tasks(scheduled_tasks)
@@ -12,7 +13,7 @@ module Dog
 
       scheduled_tasks.each do |task|
         @scheduler.every(task.frequency) do
-          if response = task.run(self)
+          if response = task.run(@bot)
             @bot.say_to_all_chat_rooms(response)
           end
         end
@@ -20,6 +21,10 @@ module Dog
     end
 
     def restart
+      @scheduler.all_jobs.each do |id, job|
+        job.unschedule
+      end
+
       @scheduler.stop unless @scheduler.nil?
       @scheduler = Rufus::Scheduler.start_new
     end
