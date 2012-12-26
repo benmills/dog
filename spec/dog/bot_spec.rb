@@ -58,14 +58,14 @@ describe Dog::Bot do
 
   describe ".process_chat_message" do
     it "processes a message that matches" do
-      message = OpenStruct.new(:from => "bob", :body => "hi dog")
+      message = OpenStruct.new(:from => OpenStruct.new(:node => "bob"), :body => "hi dog")
       subject.process_chat_message(message)
 
-      connection.output.last.must_equal ["bob", "hello"]
+      connection.output.last.must_equal [OpenStruct.new(:node => "bob"), "hello"]
     end
 
     it "doesn't process a non-matching message" do
-      message = OpenStruct.new(:from => "bob", :body => "bad string")
+      message = OpenStruct.new(:from => OpenStruct.new(:node => "bob"), :to_s => "bob", :body => "bad string")
       subject.process_chat_message(message)
 
       connection.output.must_be_empty

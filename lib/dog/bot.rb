@@ -12,20 +12,20 @@ module Dog
     end
 
     def process_chat_message(message)
-      response = process(message.body)
+      response = process(message.body, message.from.node)
       say(message.from, response) unless response.nil?
     end
 
     def process_group_chat_message(message)
       return if _from_self(message) || message.delayed?
 
-      response = process message.body
+      response = process(message.body, message.from.resource)
 
       say_to_chat(message.from.node, response) unless response.nil?
     end
 
-    def process(message)
-      response = respond_to(message)
+    def process(message, from)
+      response = respond_to(message, from)
 
       if response.is_a?(Symbol)
         respond_to_action(message, response)
@@ -34,9 +34,9 @@ module Dog
       end
     end
 
-    def respond_to(text)
+    def respond_to(text, from)
       @commands.each do |command|
-        response = command.respond_to text
+        response = command.respond_to(text, from)
         return response unless response.nil?
       end
 

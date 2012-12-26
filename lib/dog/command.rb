@@ -6,7 +6,7 @@ module Dog
       @title = title
       @matchers = []
       @subcommands = []
-      @action = ->(input){ }
+      @action = ->(input, from=nil){ }
     end
 
     def action(&action)
@@ -33,19 +33,19 @@ module Dog
       @subcommands << subcommand
     end
 
-    def subcommand_response(input_string)
+    def subcommand_response(input_string, from)
       @subcommands.each do |subcommand|
-        response = subcommand.respond_to(input_string)
+        response = subcommand.respond_to(input_string, from)
         return response unless response.nil?
       end
 
       nil
     end
 
-    def respond_to(input_string)
+    def respond_to(input_string, from=nil)
       if matches?(input_string)
-        response = subcommand_response input_string
-        response || @action.call(input_string)
+        response = subcommand_response(input_string, from)
+        response || @action.call(input_string, from)
       end
     end
   end
