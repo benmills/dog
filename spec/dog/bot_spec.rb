@@ -6,35 +6,7 @@ require_relative "../../lib/dog/bot"
 require_relative "../../lib/dog/command"
 require_relative "../../lib/dog/scheduler"
 require_relative "../../lib/dog/scheduled_task"
-
-class FakeConnection
-  attr_reader :output, :chat_output, :rooms
-
-  def initialize
-    @output = []
-    @chat_output = []
-    @rooms = []
-  end
-
-  def say from, response
-    @output << [from, response]
-  end
-
-  def say_to_chat from, response
-    @chat_output << [from, response]
-  end
-
-  def join room_name
-    @rooms << room_name
-  end
-
-  def jid
-    OpenStruct.new(
-      :jid => OpenStruct.new(:domain => "example.com"),
-      :node => "dog"
-    )
-  end
-end
+require_relative "../../lib/dog/test_connection"
 
 class Dog::Bot
   def config
@@ -51,7 +23,7 @@ class Dog::Bot
 end
 
 describe Dog::Bot do
-  let(:connection) { FakeConnection.new }
+  let(:connection) { Dog::TestConnection.new }
   subject { Dog::Bot.new(connection, "config") }
 
   before(:each) { subject.config }
@@ -61,19 +33,19 @@ describe Dog::Bot do
       message = OpenStruct.new(:from => "bob", :body => "hi dog")
       subject.process_chat_message(message)
 
-      connection.output.last.must_equal ["bob", "hello"]
+      connection.sent_messages.last.must_equal ["bob", "hello"]
     end
 
     it "doesn't process a non-matching message" do
       message = OpenStruct.new(:from => "bob", :body => "bad string")
       subject.process_chat_message(message)
 
-      connection.output.must_be_empty
+      connection.sent_messages.must_be_empty
     end
   end
 
   describe ".process_group_chat_message" do
-    it "processes a message that matches" do
+    it "processes a group message that matches" do
       message = OpenStruct.new(
         :from => OpenStruct.new(:node => "bob", :domain => "chat"),
         :body => "hi dog",
@@ -81,7 +53,7 @@ describe Dog::Bot do
       )
       subject.process_group_chat_message(message)
 
-      connection.chat_output.last.must_equal ["bob", "hello"]
+      connection.sent_messages.last.must_equal ["bob", "hello"]
     end
 
     it "doesn't process a non-matching message" do
@@ -91,7 +63,7 @@ describe Dog::Bot do
         :delayed? => false
       )
       subject.process_group_chat_message(message)
-      connection.chat_output.must_be_empty
+      connection.sent_messages.must_be_empty
     end
   end
 
@@ -100,7 +72,7 @@ describe Dog::Bot do
       output = subject.respond_to_action("dog join chatroom", :join)
 
       output.must_equal "joined chatroom"
-      connection.rooms.last.must_equal "chatroom"
+      connection.joined_rooms.last.must_equal "chatroom"
     end
 
     it "reloads" do
@@ -117,13 +89,13 @@ describe Dog::Bot do
   describe ".join" do
     it "joins a room" do
       subject.join("my_room")
-      connection.rooms.last.must_equal "my_room"
+      connection.joined_rooms.last.must_equal "my_room"
     end
 
     it "can join many rooms" do
       rooms = ["my_room", "my_other_room"]
       subject.join(*rooms)
-      connection.rooms.must_equal rooms
+      connection.joined_rooms.must_equal rooms
     end
   end
 end

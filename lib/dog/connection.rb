@@ -19,7 +19,7 @@ module Dog
     end
 
     def say(to, text)
-      @client.write Blather::Stanza::Message.new(to, text, :chat)
+      @client.write(Blather::Stanza::Message.new(to, text, :chat))
     end
 
     def say_to_chat(room_name, text)
