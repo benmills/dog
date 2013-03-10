@@ -1,6 +1,6 @@
 module Dog
   class Bot
-    attr_accessor :memory
+    attr_accessor :memory, :commands
 
     def initialize(connection, config_path)
       @config_path = config_path

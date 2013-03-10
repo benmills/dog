@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+require "ostruct"
+require "dog"
+require "dog/test_connection"
+
+unless ARGV.count >= 1
+  puts "Usage: dog [CONFIG PATH] [TEST MESSAGE]"
+  exit 1
+end
+
+config_path = ARGV.first
+message = ARGV[1..-1].join(" ")
+
+test_connection = Dog::TestConnection.new
+bot = Dog::Bot.new(test_connection, config_path)
+bot.config
+output = bot.process(message)
+
+if output.nil?
+  puts "no response for '#{message}'"
+else
+  puts output
+end
