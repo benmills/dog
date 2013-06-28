@@ -4,7 +4,6 @@ require "minitest/autorun"
 
 require_relative "../../lib/dog/bot"
 require_relative "../../lib/dog/command"
-require_relative "../../lib/dog/scheduler"
 require_relative "../../lib/dog/scheduled_task"
 require_relative "../../lib/dog/test_connection"
 

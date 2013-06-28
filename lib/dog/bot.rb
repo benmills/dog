@@ -7,7 +7,6 @@ module Dog
       @connection = connection
       @commands = []
       @rooms = []
-      @scheduler = Scheduler.new(self)
       @memory = {}
     end
 
@@ -87,7 +86,6 @@ module Dog
 
       @commands = config.commands
       @tasks = config.scheduled_tasks
-      @scheduler.schedule_tasks(@tasks)
       join(*config.chat_rooms)
     end
 
