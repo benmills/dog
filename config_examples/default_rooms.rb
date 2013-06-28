@@ -1,1 +1,1 @@
-chat_rooms "dog_test", "dog_test2"
+chat_rooms "dog_test", "dog_test2", "test"
