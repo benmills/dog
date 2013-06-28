@@ -8,7 +8,7 @@
    gem.homepage      = "https://github.com/benmills/dog"
 
    gem.files         = `git ls-files`.split($\)
-   gem.executables   = ["dog"]
+   gem.executables   = ["dog", "dog-test"]
    gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
    gem.name          = "dog-bot"
    gem.require_paths = ["lib"]
