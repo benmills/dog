@@ -8,6 +8,7 @@ unless ARGV.count >= 1
   exit 1
 end
 
+$VERBOSE = nil
 config_path = ARGV.first
 message = ARGV[1..-1].join(" ")
 

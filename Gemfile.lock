@@ -1,10 +1,9 @@
 PATH
   remote: .
   specs:
-    dog-bot (0.1.2)
+    dog-bot (0.1.4)
       blather (~> 0.8.0)
       google_image_api (~> 0.0.1)
-      rufus-scheduler (~> 2.0.17)
 
 GEM
   remote: https://rubygems.org/
@@ -12,13 +11,13 @@ GEM
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
-    blather (0.8.5)
+    blather (0.8.3)
       activesupport (>= 2.3.11)
       eventmachine (>= 1.0.0)
       girl_friday
       niceogiri (~> 1.0)
       nokogiri (~> 1.5, >= 1.5.6)
-    connection_pool (1.1.0)
+    connection_pool (1.0.0)
     eventmachine (1.0.3)
     girl_friday (0.11.2)
       connection_pool (~> 1.0)
@@ -27,7 +26,7 @@ GEM
     i18n (0.6.1)
     mini_portile (0.5.0)
     multi_json (1.7.7)
-    niceogiri (1.1.2)
+    niceogiri (1.1.1)
       nokogiri (~> 1.5)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
@@ -35,9 +34,6 @@ GEM
     rubinius-actor (0.0.2)
       rubinius-core-api
     rubinius-core-api (0.0.1)
-    rufus-scheduler (2.0.19)
-      tzinfo (>= 0.3.23)
-    tzinfo (1.0.1)
 
 PLATFORMS
   ruby
