@@ -48,6 +48,8 @@ module Dog
         room_name = message.split.last
         join room_name
         "joined #{room_name}"
+      when :help then
+        help
       when :reload then
         config
         "config reloaded"
@@ -87,6 +89,10 @@ module Dog
       @commands = config.commands
       @tasks = config.scheduled_tasks
       join(*config.chat_rooms)
+    end
+
+    def help
+      self.commands.map { |c| c.help("") }.inject(:+)
     end
 
     def _from_self(message)
