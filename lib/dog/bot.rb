@@ -92,7 +92,7 @@ module Dog
     end
 
     def help
-      self.commands.map { |c| c.help("") }.inject(:+)
+      self.commands.map(&:help).inject(:+)
     end
 
     def _from_self(message)
