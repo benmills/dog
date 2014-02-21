@@ -49,14 +49,14 @@ module Dog
       end
     end
 
-    def help(parent_matcher_string = nil)
+    def help(depth = 0, parent_matcher_string = nil)
       matchers = @matchers.uniq
 
       matcher_string = (matchers.count == 1 ? matchers.first.to_s : "{#{matchers.join(',')}}")
       matcher_string = "#{parent_matcher_string} & #{matcher_string}" if parent_matcher_string
 
-      output = "#{@title}: #{matcher_string}\n"
-      output += @subcommands.map { |c| c.help(matcher_string) }.inject(:+) unless @subcommands.empty?
+      output = "#{"  " * depth}#{@title}: #{matcher_string}\n"
+      output += @subcommands.map { |c| c.help(depth + 1, matcher_string) }.inject(:+) unless @subcommands.empty?
       output
     end
   end
