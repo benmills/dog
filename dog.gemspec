@@ -17,5 +17,5 @@
    gem.add_dependency "blather", "~> 0.8.0"
    gem.add_dependency "google_image_api", "~> 0.0.1"
 
-   gem.add_development_dependency "rake", "~> 0.9.2.2"
+   gem.add_development_dependency "rake", "~> 12.3.3"
  end
