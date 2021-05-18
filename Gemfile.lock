@@ -1,39 +1,49 @@
 PATH
   remote: .
   specs:
-    dog-bot (0.1.4)
+    dog-bot (0.1.5)
       blather (~> 0.8.0)
       google_image_api (~> 0.0.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (3.2.13)
-      i18n (= 0.6.1)
-      multi_json (~> 1.0)
-    blather (0.8.3)
+    activesupport (6.1.3.2)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
+    blather (0.8.8)
       activesupport (>= 2.3.11)
       eventmachine (>= 1.0.0)
       girl_friday
       niceogiri (~> 1.0)
       nokogiri (~> 1.5, >= 1.5.6)
-    connection_pool (1.0.0)
-    eventmachine (1.0.3)
+    concurrent-ruby (1.1.8)
+    connection_pool (1.2.0)
+    eventmachine (1.2.7)
     girl_friday (0.11.2)
       connection_pool (~> 1.0)
       rubinius-actor
     google_image_api (0.0.1)
-    i18n (0.6.1)
-    mini_portile (0.5.0)
-    multi_json (1.7.7)
-    niceogiri (1.1.1)
+    i18n (1.8.10)
+      concurrent-ruby (~> 1.0)
+    mini_portile2 (2.5.1)
+    minitest (5.14.4)
+    niceogiri (1.1.2)
       nokogiri (~> 1.5)
-    nokogiri (1.6.0)
-      mini_portile (~> 0.5.0)
+    nokogiri (1.11.4)
+      mini_portile2 (~> 2.5.0)
+      racc (~> 1.4)
+    racc (1.5.2)
     rake (0.9.2.2)
     rubinius-actor (0.0.2)
       rubinius-core-api
     rubinius-core-api (0.0.1)
+    tzinfo (2.0.4)
+      concurrent-ruby (~> 1.0)
+    zeitwerk (2.4.2)
 
 PLATFORMS
   ruby
